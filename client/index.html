@@ -7,15 +7,21 @@
     <title>Test</title>
 </head>
 <body>
+    <input id="message" type="text">
+    <button onclick="sendMessage()">Send</button>
     <button onclick="connect()">Connect</button>
-   <script>
+    <script>
+        let socket;
         function connect() {
-            let socket = new WebSocket("ws://localhost:8080/")
+            socket = new WebSocket('ws://localhost:8080/');
             console.log("Connecting...")
 
             socket.onopen = (event) => {
                 console.log("Connected")
-                socket.send("client message")
+            }
+
+            socket.onmessage = (event) => {
+                console.log(event.data)
             }
 
             socket.onclose = (event) => {
@@ -26,6 +32,11 @@
                 console.log("Error", error)
             }
         }
-   </script> 
+
+        function sendMessage() {
+            const message = document.getElementById('message').value;
+            socket.send(JSON.stringify({messsage: message}));
+        }
+    </script> 
 </body>
 </html>
