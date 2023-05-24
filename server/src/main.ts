@@ -1,22 +1,17 @@
 import { WebSocketClient, WebSocketServer } from "https://deno.land/x/websocket@v0.1.4/mod.ts";
 import { generate } from "https://deno.land/std@0.188.0/uuid/v1.ts";
+import Game from './game.ts';
+import Player from './player.ts';
+import Vector from './vector.ts';
 
-let sockets = new Map<String, WebSocket>();
-
-function broadcast(msg: any) {
-  sockets.forEach((ws: WebSocket) => {
-    ws.send(JSON.stringify(msg));
-  });
-}
+var game: Game = new Game();
 
 const wss = new WebSocketServer(8080);
 wss.on("connection", function (ws: WebSocketClient) {
-  const uuid = generate();
-  sockets.set(uuid, ws);
-
+  game.addPlayer(new Player(0, ws, new Vector(0, 0)));
   ws.on("message", function (message: string) {
     console.log("client message: " + message);
-    broadcast(message);
+    game.broadcast(message);
   });
 });
 
