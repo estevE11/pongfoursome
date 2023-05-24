@@ -7,9 +7,18 @@
     <title>Test</title>
 </head>
 <body>
-    <input id="message" type="text">
-    <button onclick="sendMessage()">Send</button>
-    <button onclick="connect()">Connect</button>
+    <div>
+        <ul id="messages">
+
+        </ul>
+    </div>
+    <div id="input-ui" style="visibility: hidden">
+        <input id="message" type="text">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="connect-ui">
+        <button onclick="connect()">Connect</button>
+    </div>
     <script>
         let socket;
         function connect() {
@@ -18,10 +27,14 @@
 
             socket.onopen = (event) => {
                 console.log("Connected")
+                hideConnectUI();
+                showInputUI();
             }
 
             socket.onmessage = (event) => {
-                console.log(event.data)
+                const msg = JSON.parse(JSON.parse(event.data))
+                console.log(msg)
+                addMessage(msg)
             }
 
             socket.onclose = (event) => {
@@ -35,7 +48,23 @@
 
         function sendMessage() {
             const message = document.getElementById('message').value;
-            socket.send(JSON.stringify({messsage: message}));
+            socket.send(JSON.stringify({message: message}));
+            document.getElementById('message').value = "";
+        }
+
+        function addMessage(message) {
+            const li = document.createElement('li');
+            li.innerText = message.message;
+            const messages = document.getElementById('messages');
+            messages.appendChild(li);
+        }
+
+        function hideConnectUI() {
+            document.getElementById("connect-ui").style.visibility = 'hidden';
+        }
+
+        function showInputUI() {
+            document.getElementById("input-ui").style.visibility = 'visible';
         }
     </script> 
 </body>
