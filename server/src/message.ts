@@ -16,11 +16,12 @@ export function parseMessage(message: string): Message {
     return json as Message;
 }
 
-export function createConnectResponse(id: string): Message {
+export function createConnectResponse(id: string, x: number): Message {
     return {
         type: MessageType.CONNECT,
         data: {
-            id: id
+            id: id,
+            x: x
         }
     };
 }

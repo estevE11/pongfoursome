@@ -31,7 +31,8 @@ export default class Game {
     }
 
     public addPlayer(player: Player): void {
-        player.setPosition(0, Math.floor(Math.random()*100));
+        if (this.numberOfPlayers() >= 2) return;
+        player.setPosition(this.numberOfPlayers() == 0 ? 50 : 800-100, Math.floor(Math.random()*100));
         this.players[player.id] = player;
         if (this.numberOfPlayers() == 1) {
             this.run();

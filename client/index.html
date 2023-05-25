@@ -44,7 +44,7 @@
         let x = 0;
         let y = 0;
 
-        const pW = 20, pH = 20;
+        const pW = 50, pH = 200;
 
         let online_players = [];
         
@@ -53,10 +53,8 @@
         let lastFrameTime = performance.now();
 
         let keybinds = {
-            up: 75,
-            down: 74,
-            left: 72,
-            right: 76
+            up: 38,
+            down: 40,
         };
 
         function init() {
@@ -84,11 +82,9 @@
         }
 
         function update(delta) {
-            delta /= 10;
+            //delta /= 10;
             if(!connected) return;
             
-            if(keys[keybinds.right]) x += delta;
-            if(keys[keybinds.left]) x -= delta;
             if(keys[keybinds.down]) y += delta;
             if(keys[keybinds.up]) y -= delta;
 
@@ -102,7 +98,7 @@
 
             online_players.map((player) => {
                 ctx.fillStyle = "white";
-                ctx.fillRect(player.x, player.y, 20, 20);
+                ctx.fillRect(player.x, player.y, pW, pH);
             });
         }
 
@@ -152,12 +148,14 @@
 
         function handleConnectMessage(data) {
             id = data.id;
+            x = data.x;
             init();
         }
 
         function handleGameMessage(data) {
             online_players = data.players;
-            const player = online_players.find(p => p.id == id)
+            const player = online_players.find(p => p.id == id);
+            if(!player) return;
             x = player.x;
             y = player.y;
         }

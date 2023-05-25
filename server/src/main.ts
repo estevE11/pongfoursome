@@ -43,7 +43,7 @@ function handleConnectMessage(ws: WebSocketClient, data: object): Message | unde
     const username: string = data.username;
     const player: Player = new Player(ws, username, new Vector(0, 0));
     game.addPlayer(player);
-    return createConnectResponse(player.getID());
+    return createConnectResponse(player.getID(), player.getPosition().x);
 }
 
 function handleGameMessage(ws: WebSocketClient, data: object): Message | undefined {
