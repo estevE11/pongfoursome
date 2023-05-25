@@ -1,6 +1,7 @@
 import Player from './player.ts';
 import { Message, createGameResponse} from './message.ts';
 import { GameLoop } from './game_loop.ts';
+import Ball from './ball.ts';
 
 interface IPlayerMap {
     [key: string]: Player;
@@ -10,10 +11,15 @@ export default class Game {
     private players: IPlayerMap;
     private loop: GameLoop;
 
+    private ball: Ball;
+
+    private playing: boolean = false;
+
     constructor(fps: number) {
         this.players = {};
         console.log(this.players);
         this.loop = new GameLoop(fps);
+        this.ball = new Ball();
     }
 
     public run(): void {
@@ -26,7 +32,8 @@ export default class Game {
 
     public update(delta: number): void {
         if (!this.players || this.numberOfPlayers() == 0) return;
-        const bmsg = createGameResponse(this.getPlayers());
+        if(this.playing) this.ball.update();
+        const bmsg = createGameResponse(this.getPlayers(), this.ball);
         this.broadcast(bmsg);
     }
 
@@ -37,6 +44,8 @@ export default class Game {
         if (this.numberOfPlayers() == 1) {
             this.run();
         }
+
+        if (this.numberOfPlayers() == 2) this.playing = true;
     }
 
     public removePlayer(id: string): void {

@@ -1,4 +1,8 @@
 import { WebSocketClient } from 'https://deno.land/x/websocket@v0.1.4/mod.ts';
+
+import Ball from './ball.ts';
+import Player from './player.ts';
+
 export enum MessageType {
     CONNECT = "CONNECT",
     GAME = "GAME",
@@ -36,7 +40,7 @@ export function createChatResponse(username: string, message: string): Message {
     };
 }
 
-export function createGameResponse(players: Player[]): Message {
+export function createGameResponse(players: Player[], ball: Ball): Message {
     const positions = players.map((player: Player) => {
         return {
             id: player.getID(),
@@ -47,7 +51,11 @@ export function createGameResponse(players: Player[]): Message {
     return {
         type: MessageType.GAME,
         data: {
-            players: positions
+            players: positions,
+            ball_position: {
+                x: ball.getPosition().x,
+                y: ball.getPosition().y
+            }
         }
     }
 }

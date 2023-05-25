@@ -7,4 +7,8 @@ export default class Vector {
         this.y = y;
     }
 
+    public add(vec: Vector) {
+        this.x += vec.x;
+        this.y += vec.y;
+    }
 }

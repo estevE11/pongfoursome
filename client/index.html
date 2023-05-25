@@ -44,6 +44,9 @@
         let x = 0;
         let y = 0;
 
+        let bx = 0;
+        let by = 0;
+
         const pW = 50, pH = 200;
 
         let online_players = [];
@@ -100,6 +103,11 @@
                 ctx.fillStyle = "white";
                 ctx.fillRect(player.x, player.y, pW, pH);
             });
+
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.ellipse(bx, by, 10, 10, 0, 0, Math.PI*2);
+            ctx.fill();
         }
 
         function clear() {
@@ -153,7 +161,12 @@
         }
 
         function handleGameMessage(data) {
+            console.log(data);
             online_players = data.players;
+
+            bx = data.ball_position.x;
+            by = data.ball_position.y;
+
             const player = online_players.find(p => p.id == id);
             if(!player) return;
             x = player.x;
