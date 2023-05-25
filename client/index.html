@@ -5,12 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test</title>
+    <style>
+        #messages tr td:first-child {
+            text-align: end;
+        }
+    </style>
 </head>
 <body>
     <div>
-        <ul id="messages">
-
-        </ul>
+        <table>
+            <tbody id="messages">
+            </tbody>
+        </table>
     </div>
     <div id="input-ui" style="visibility: hidden">
         <input id="message" type="text">
@@ -65,7 +71,7 @@
         }
 
         function handleChatMessage(data) {
-            addMessage(data.username + ": " + data.message);
+            addMessage(data.username, data.message);
         }
 
         function sendChatMessage() {
@@ -78,11 +84,16 @@
             socket.send(JSON.stringify({type: type, data: data}));
         }
 
-        function addMessage(message) {
-            const li = document.createElement('li');
-            li.innerText = message;
+        function addMessage(username, message) {
+            const td_username = document.createElement('td');
+            const td_message = document.createElement('td');
+            td_username.innerText = username;
+            td_message.innerText = message;
             const messages = document.getElementById('messages');
-            messages.appendChild(li);
+            const tr = document.createElement('tr');
+            tr.appendChild(td_username);
+            tr.appendChild(td_message);
+            messages.appendChild(tr);
         }
 
         function hideConnectUI() {
