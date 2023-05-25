@@ -20,7 +20,6 @@ const wss = new WebSocketServer(8080);
 wss.on("connection", function (ws: WebSocketClient) {
     let id;
     ws.on("message", function (message: string) {
-        console.log("received: ", message);
         const response = handleMessage(ws, message);
         if (response) {
             if (response.type == MessageType.CONNECT) id = response.data.id;

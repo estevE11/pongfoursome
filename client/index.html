@@ -50,6 +50,8 @@
         
         let keys = [];
 
+        let lastFrameTime = performance.now();
+
         function init() {
             canvas = document.getElementById('canvas');
             ctx = canvas.getContext('2d');
@@ -65,19 +67,23 @@
             window.requestAnimationFrame(loop);
         }
 
-        function loop() {
-            update();
+        function loop(timestamp) {
+            const delta = timestamp - lastFrameTime;
+            lastFrameTime = timestamp;
+
+            update(delta);
             render();
             window.requestAnimationFrame(loop);
         }
 
-        function update() {
+        function update(delta) {
+            delta /= 10;
             if(!connected) return;
             
-            if(keys[39]) x++;
-            if(keys[37]) x--;
-            if(keys[40]) y++;
-            if(keys[38]) y--;
+            if(keys[39]) x += delta;
+            if(keys[37]) x -= delta;
+            if(keys[40]) y += delta;
+            if(keys[38]) y -= delta;
 
             if(x + pW > width) x = width - pW;
 
