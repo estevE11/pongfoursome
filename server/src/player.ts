@@ -28,6 +28,11 @@ export default class Player {
         return this.position;
     }
 
+    public setPosition(x: number, y: number): void {
+        this.position.x = x;
+        this.position.y = y;
+    }
+
     public getSocket(): WebSocket {
         return this.socket;
     }

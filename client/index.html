@@ -39,6 +39,9 @@
         let height = document.getElementById("canvas").height;
 
         let x = 0;
+        let y = 0;
+
+        let online_players = [];
 
         function init() {
             canvas = document.getElementById('canvas');
@@ -55,13 +58,17 @@
 
         function update() {
             x++;
+
+            sendGameMessage();
         }
 
         function render() {
-           clear(); 
+            clear(); 
 
-           ctx.fillStyle = "white";
-           ctx.fillRect(x, 20, 20, 20);
+            players.map((player) => {
+                ctx.fillStyle = "white";
+                ctx.fillRect(player.x, player.y, 20, 20);
+            });
         }
 
         function clear() {
@@ -110,12 +117,24 @@
         }
 
         function handleGameMessage(data) {
-            console.log(data)
-            console.log(`${data.x} ${data.y}`)
+            players = data.players;
+            const player = players.find(p => p.id == id)
+            x = player.x;
+            y = player.y;
         }
 
         function handleChatMessage(data) {
             addMessage(data.username, data.message);
+        }
+
+        function sendGameMessage() {
+            const data = {
+                id: id,
+                x: x,
+                y: y
+            };
+
+            sendMessage("game", data);
         }
 
         function sendChatMessage() {

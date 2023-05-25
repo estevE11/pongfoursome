@@ -14,7 +14,7 @@ handler[MessageType.CONNECT] = handleConnectMessage;
 handler[MessageType.CHAT] = handleChatMessage;
 handler[MessageType.GAME] = handleGameMessage;
 
-var game: Game = new Game();
+var game: Game = new Game(60);
 
 const wss = new WebSocketServer(8080);
 wss.on("connection", function (ws: WebSocketClient) {
@@ -45,7 +45,8 @@ function handleConnectMessage(ws: WebSocketClient, data: object): Message | unde
 }
 
 function handleGameMessage(ws: WebSocketClient, data: object): Message | undefined {
-    
+    game.updatePlayer(data.id, data.x, data.y); 
+    return;
 }
 
 function handleChatMessage(ws: WebSocketClient, data: object): Message | undefined {

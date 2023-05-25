@@ -31,10 +31,15 @@ export default class Game {
     }
 
     public addPlayer(player: Player): void {
+        player.setPosition(0, Math.floor(Math.random()*100));
         this.players[player.id] = player;
         if (this.numberOfPlayers() == 1) {
             this.run();
         }
+    }
+
+    public updatePlayer(id: string, x: number, y: number): void {
+        this.players[id].setPosition(x, y);
     }
 
     public broadcast(msg: Message): void {
