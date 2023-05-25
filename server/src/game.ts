@@ -38,6 +38,10 @@ export default class Game {
         }
     }
 
+    public removePlayer(id: string): void {
+        delete this.players[id];
+    }
+
     public updatePlayer(id: string, x: number, y: number): void {
         this.players[id].setPosition(x, y);
     }
