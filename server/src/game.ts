@@ -1,4 +1,5 @@
 import Player from './player.ts';
+import { Message } from './message.ts';
 export default class Game {
     private players: Player[];
 
@@ -22,10 +23,10 @@ export default class Game {
         this.players.push(player);
     }
 
-    public broadcast(message: any): void {
+    public broadcast(msg: Message): void {
         this.players.forEach((player: Player) => {
-            console.log("sending message");
-            player.socket.send(JSON.stringify(message));
+            player.socket.send(JSON.stringify(msg));
+            console.log("message sent");
         });
     }
 }

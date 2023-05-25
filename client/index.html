@@ -14,27 +14,29 @@
     </div>
     <div id="input-ui" style="visibility: hidden">
         <input id="message" type="text">
-        <button onclick="sendMessage()">Send</button>
+        <button onclick="sendChatMessage()">Send</button>
     </div>
     <div id="connect-ui">
+        <input id="username" type="text">
         <button onclick="connect()">Connect</button>
     </div>
     <script>
         let socket;
+        let username;
+        let id;
         function connect() {
             socket = new WebSocket('ws://localhost:8080/');
             console.log("Connecting...")
 
             socket.onopen = (event) => {
-                console.log("Connected")
+                sendConnectionMessage();
                 hideConnectUI();
                 showInputUI();
             }
 
             socket.onmessage = (event) => {
-                const msg = JSON.parse(JSON.parse(event.data))
-                console.log(msg)
-                addMessage(msg)
+                console.log(event.data)
+                handleMessage(event.data)
             }
 
             socket.onclose = (event) => {
@@ -46,15 +48,39 @@
             }
         }
 
-        function sendMessage() {
+        function sendConnectionMessage() {
+            username = document.getElementById("username").value;
+            sendMessage("connect", {
+                username: username
+            })
+        }
+
+        function handleMessage(data) {
+            const msg = JSON.parse(data)
+            handler[msg.type.toLowerCase()](msg.data);
+        }
+
+        function handleConnectMessage(data) {
+            id = data.id;
+        }
+
+        function handleChatMessage(data) {
+            addMessage(data.username + ": " + data.message);
+        }
+
+        function sendChatMessage() {
             const message = document.getElementById('message').value;
-            socket.send(JSON.stringify({message: message}));
+            sendMessage("chat", {id: id, username: username, message: message});
             document.getElementById('message').value = "";
+        }
+
+        function sendMessage(type, data) {
+            socket.send(JSON.stringify({type: type, data: data}));
         }
 
         function addMessage(message) {
             const li = document.createElement('li');
-            li.innerText = message.message;
+            li.innerText = message;
             const messages = document.getElementById('messages');
             messages.appendChild(li);
         }
@@ -66,6 +92,11 @@
         function showInputUI() {
             document.getElementById("input-ui").style.visibility = 'visible';
         }
+
+        const handler = {
+            "connect": handleConnectMessage,
+            "chat": handleChatMessage
+        };
     </script> 
 </body>
 </html>
