@@ -45,7 +45,7 @@ function handleConnectMessage(ws: WebSocketClient, data: object): Message | unde
 }
 
 function handleGameMessage(ws: WebSocketClient, data: object): Message | undefined {
-
+    
 }
 
 function handleChatMessage(ws: WebSocketClient, data: object): Message | undefined {

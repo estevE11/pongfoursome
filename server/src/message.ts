@@ -34,3 +34,19 @@ export function createChatResponse(username: string, message: string): Message {
         }
     };
 }
+
+export function createGameResponse(players: Player[]): Message {
+    const positions = players.map((player: Player) => {
+        return {
+            id: player.getID(),
+            x: player.getPosition().x,
+            y: player.getPosition().y
+        }
+    })
+    return {
+        type: MessageType.GAME,
+        data: {
+            players: positions
+        }
+    }
+}

@@ -24,6 +24,10 @@ export default class Player {
         return this.id;
     }
 
+    public getPosition(): Vector {
+        return this.position;
+    }
+
     public getSocket(): WebSocket {
         return this.socket;
     }
