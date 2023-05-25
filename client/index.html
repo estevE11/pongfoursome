@@ -55,10 +55,17 @@
 
         let lastFrameTime = performance.now();
 
+        let lastPacketTime = performance.now();
+        let ms = 0;
+
+        let deltaCopy = -1;
+
         let keybinds = {
             up: 38,
             down: 40,
         };
+
+        let msList = new Array(100).fill(0);
 
         function init() {
             canvas = document.getElementById('canvas');
@@ -77,6 +84,7 @@
 
         function loop(timestamp) {
             const delta = timestamp - lastFrameTime;
+            deltaCopy = delta;
             lastFrameTime = timestamp;
 
             update(delta);
@@ -87,13 +95,15 @@
         function update(delta) {
             //delta /= 10;
             if(!connected) return;
-            
+           
+            const lastY = y;
             if(keys[keybinds.down]) y += delta;
             if(keys[keybinds.up]) y -= delta;
 
             if(x + pW > width) x = width - pW;
 
-            sendGameMessage();
+            if(lastY != y)
+                sendGameMessage();
         }
 
         function render() {
@@ -108,6 +118,13 @@
             ctx.beginPath();
             ctx.ellipse(bx, by, 10, 10, 0, 0, Math.PI*2);
             ctx.fill();
+
+            ctx.font = "30px Arial";
+            ctx.fillText("ms: " + ms, 100, 100);
+
+            for(let i = 0; i < msList.length; i++) {
+                ctx.fillRect(210 + i, 210 - msList[i], 1, 1);
+            }
         }
 
         function clear() {
@@ -161,6 +178,12 @@
         }
 
         function handleGameMessage(data) {
+            const timestamp = Date.now();
+            ms = timestamp - lastPacketTime;
+            lastPacketTime = timestamp;
+            msList.push(ms);
+            msList.shift();
+
             online_players = data.players;
 
             bx = data.ball_position.x;
@@ -168,9 +191,8 @@
 
             const player = online_players.find(p => p.id == id);
             if(!player) return;
-            x = player.x;
-            y = player.y;
-            console.log("recv: " + x + ", " + y)
+            //x = player.x;
+            //y = player.y;
         }
 
         function handleChatMessage(data) {
@@ -184,7 +206,6 @@
                 y: y
             };
 
-            console.log("send: " + x + ", " + y);
             sendMessage("game", data);
         }
 
