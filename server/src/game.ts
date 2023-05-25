@@ -2,6 +2,7 @@ import Player from './player.ts';
 import { Message, createGameResponse} from './message.ts';
 import { GameLoop } from './game_loop.ts';
 import Ball from './ball.ts';
+import { checkCircleRectangle } from './geometry.ts';
 
 interface IPlayerMap {
     [key: string]: Player;
@@ -32,9 +33,22 @@ export default class Game {
 
     public update(delta: number): void {
         if (!this.players || this.numberOfPlayers() == 0) return;
-        if(this.playing) this.ball.update();
+        if (this.playing) {
+            this.ball.update();
+            this.checkCollisions();
+        }
         const bmsg = createGameResponse(this.getPlayers(), this.ball);
         this.broadcast(bmsg);
+    }
+
+    public checkCollisions(): void {
+        if (!this.ball) return;
+        Object.keys(this.players).forEach((key: string) => {
+            const player: Player = this.players[key];
+            if (checkCircleRectangle(this.ball, player)) {
+                this.ball.onCollide();
+            }
+        });
     }
 
     public addPlayer(player: Player): void {

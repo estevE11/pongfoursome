@@ -1,12 +1,16 @@
 import { WebSocketClient, WebSocketServer } from 'https://deno.land/x/websocket@v0.1.4/mod.ts';
 import Vector from './vector.ts';
 import { generate } from 'https://deno.land/std@0.188.0/uuid/v1.ts';
+import { Rect } from './geometry.ts';
 
-export default class Player {
+export default class Player implements Rect {
     private id: string;
     private socket: WebSocket;
     private position: Vector;
     private username: string;
+
+    private w: number = 50;
+    private h: number = 200;
 
     constructor(socket: WebSocket, username: string, position: Vector) {
         this.id = generate();

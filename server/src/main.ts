@@ -5,6 +5,9 @@ import Player from './player.ts';
 import Vector from './vector.ts';
 import { Message, MessageType, createConnectResponse, createChatResponse, parseMessage } from './message.ts';
 
+export const CANVAS_WIDTH = 800;
+export const CANVAS_HEIGHT = 600;
+
 interface IHandler {
     [key: MessageType]: (data: object) => Message | undefined;
 }
