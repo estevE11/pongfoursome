@@ -65,7 +65,7 @@
         function render() {
             clear(); 
 
-            players.map((player) => {
+            online_players.map((player) => {
                 ctx.fillStyle = "white";
                 ctx.fillRect(player.x, player.y, 20, 20);
             });
@@ -117,7 +117,7 @@
         }
 
         function handleGameMessage(data) {
-            players = data.players;
+            online_players = data.players;
             const player = players.find(p => p.id == id)
             x = player.x;
             y = player.y;
