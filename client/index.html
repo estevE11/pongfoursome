@@ -12,6 +12,13 @@
     </style>
 </head>
 <body>
+    <div id="connect-ui">
+        <input id="username" type="text">
+        <button onclick="connect()">Connect</button>
+    </div>
+    <div id="canvas-container" style="visibility: hidden">
+        <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
     <div>
         <table>
             <tbody id="messages">
@@ -22,14 +29,46 @@
         <input id="message" type="text">
         <button onclick="sendChatMessage()">Send</button>
     </div>
-    <div id="connect-ui">
-        <input id="username" type="text">
-        <button onclick="connect()">Connect</button>
-    </div>
     <script>
         let socket;
         let username;
         let id;
+
+        let canvas, ctx;
+        let width = document.getElementById("canvas").width;
+        let height = document.getElementById("canvas").height;
+
+        let x = 0;
+
+        function init() {
+            canvas = document.getElementById('canvas');
+            ctx = canvas.getContext('2d');
+            
+            window.requestAnimationFrame(loop);
+        }
+
+        function loop() {
+            update();
+            render();
+            window.requestAnimationFrame(loop);
+        }
+
+        function update() {
+            x++;
+        }
+
+        function render() {
+           clear(); 
+
+           ctx.fillStyle = "white";
+           ctx.fillRect(x, 20, 20, 20);
+        }
+
+        function clear() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, width, height);
+        }
+
         function connect() {
             socket = new WebSocket('ws://localhost:8080/');
             console.log("Connecting...")
@@ -68,6 +107,7 @@
 
         function handleConnectMessage(data) {
             id = data.id;
+            init();
         }
 
         function handleChatMessage(data) {
@@ -102,6 +142,7 @@
 
         function showInputUI() {
             document.getElementById("input-ui").style.visibility = 'visible';
+            document.getElementById("canvas-container").style.visibility = 'visible';
         }
 
         const handler = {

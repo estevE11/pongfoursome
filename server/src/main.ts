@@ -24,7 +24,11 @@ wss.on("connection", function (ws: WebSocketClient) {
         if (response) {
             ws.send(JSON.stringify(response));
         }
-  });
+    });
+
+    ws.on("close", function () {
+        console.log("connection closed");
+    });
 });
 
 function handleMessage(ws: WebSocketClient, message: string) {
