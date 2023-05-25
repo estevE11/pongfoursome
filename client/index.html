@@ -52,6 +52,13 @@
 
         let lastFrameTime = performance.now();
 
+        let keybinds = {
+            up: 75,
+            down: 74,
+            left: 72,
+            right: 76
+        };
+
         function init() {
             canvas = document.getElementById('canvas');
             ctx = canvas.getContext('2d');
@@ -80,10 +87,10 @@
             delta /= 10;
             if(!connected) return;
             
-            if(keys[39]) x += delta;
-            if(keys[37]) x -= delta;
-            if(keys[40]) y += delta;
-            if(keys[38]) y -= delta;
+            if(keys[keybinds.right]) x += delta;
+            if(keys[keybinds.left]) x -= delta;
+            if(keys[keybinds.down]) y += delta;
+            if(keys[keybinds.up]) y -= delta;
 
             if(x + pW > width) x = width - pW;
 
