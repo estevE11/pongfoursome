@@ -170,6 +170,7 @@
             if(!player) return;
             x = player.x;
             y = player.y;
+            console.log("recv: " + x + ", " + y)
         }
 
         function handleChatMessage(data) {
@@ -183,6 +184,7 @@
                 y: y
             };
 
+            console.log("send: " + x + ", " + y);
             sendMessage("game", data);
         }
 

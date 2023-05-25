@@ -26,6 +26,7 @@ export class GameLoop {
     }
 
     start(cb: Callback): void {
+        if (this.running) return;
         this.running = true;
         this.lastRunTime = Date.now();
         this.cb = cb;
