@@ -41,11 +41,20 @@
         let x = 0;
         let y = 0;
 
+        const pW = 20, pH = 20;
+
         let online_players = [];
+        
+        let keys = [];
 
         function init() {
             canvas = document.getElementById('canvas');
             ctx = canvas.getContext('2d');
+
+            window.addEventListener('keydown', (event) => {
+                keys[event.key] = true;
+                console.log(event.key);
+            })
             
             window.requestAnimationFrame(loop);
         }
@@ -58,6 +67,7 @@
 
         function update() {
             x++;
+            if(x + pW > width) x = width - pW;
 
             sendGameMessage();
         }
@@ -118,7 +128,7 @@
 
         function handleGameMessage(data) {
             online_players = data.players;
-            const player = players.find(p => p.id == id)
+            const player = online_players.find(p => p.id == id)
             x = player.x;
             y = player.y;
         }
