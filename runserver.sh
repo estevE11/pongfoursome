@@ -1,0 +1,1 @@
+deno run --allow-net --allow-env server/src/main.ts
