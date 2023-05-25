@@ -30,6 +30,8 @@
         <button onclick="sendChatMessage()">Send</button>
     </div>
     <script>
+        let ip = "localhost";
+        let port = "8080";
         let socket;
         let connected = false;
         let username;
@@ -97,7 +99,9 @@
         }
 
         function connect() {
-            socket = new WebSocket('ws://localhost:8080/');
+            let ipt = prompt("IP");
+            ip = ipt == "" ? "localhost" : ipt;
+            socket = new WebSocket('ws://' + ip + ':8080/');
             console.log("Connecting...")
 
             socket.onopen = (event) => {
